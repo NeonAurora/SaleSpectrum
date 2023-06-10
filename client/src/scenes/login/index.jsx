@@ -33,9 +33,9 @@ const LoginPage = () => {
       console.log("Login data:", { email, password });
       const response = await loginMutation({ email, password });
       console.log("Login response:", response);
-  
+
       const { data } = response;
-  
+
       if (data && data.result && data.token) {
         // Store the token in local storage
         localStorage.setItem("token", data.token);
@@ -50,7 +50,6 @@ const LoginPage = () => {
       // Handle login errors, e.g., show a notification
     }
   };
-  
 
   return (
     <Container
@@ -145,7 +144,7 @@ const LoginPage = () => {
             variant="text"
             color="secondary"
             onClick={() => {
-              // Add logic for handling create an account here
+              navigate("/request-access");
             }}
             sx={{ textTransform: "none" }}
           >

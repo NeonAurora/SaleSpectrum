@@ -17,6 +17,7 @@ import Breakdown from "scenes/breakdown";
 import Admin from "scenes/greaterWealth";
 import Performance from "scenes/performance";
 import Login from "scenes/login";
+import RequestAccess from "scenes/reqAccess";
 import AuditLogs from "scenes/auditLogs";
 import Radial from "scenes/radial";
 
@@ -31,6 +32,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/request-access" element={<RequestAccess />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
