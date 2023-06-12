@@ -18,7 +18,7 @@ const createEndpoints = (builder) => {
     }),
     createAccountRequest: builder.mutation({
       query: (requestDetails) => ({
-        url: "reqAccess",
+        url: "management/reqAccess",
         method: "POST",
         body: requestDetails,
       }),

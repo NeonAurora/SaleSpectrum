@@ -10,5 +10,6 @@ namespace AuditApi.Data
         }
 
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<ReqAccess> ReqAccesses { get; set; }
     }
 }
