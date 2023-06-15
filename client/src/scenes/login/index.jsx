@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { login } from "state/authSlice";
+import { setUserId } from "state";
 import { useLoginMutation } from "state/api";
 import { Google, Facebook, microsoft } from "@mui/icons-material";
 import { Check } from "@mui/icons-material";
@@ -40,6 +41,7 @@ const LoginPage = () => {
         // Store the token in local storage
         localStorage.setItem("token", data.token);
         dispatch(login(data.result));
+        dispatch(setUserId(data.result._id));
         navigate("/dashboard");
       } else {
         console.error("Unexpected login response:", response);
@@ -112,7 +114,7 @@ const LoginPage = () => {
             variant="text"
             color="secondary"
             onClick={() => {
-              // Add logic for handling forget password here
+              navigate("/forgotPassword");
             }}
             sx={{
               textTransform: "none",

@@ -14,12 +14,16 @@ import Overview from "scenes/overview";
 import Daily from "scenes/daily";
 import Monthly from "scenes/monthly";
 import Breakdown from "scenes/breakdown";
-import Admin from "scenes/greaterWealth";
+import GreaterWealth from "scenes/greaterWealth";
+import Admin from "scenes/admin";
 import Performance from "scenes/performance";
 import Login from "scenes/login";
 import RequestAccess from "scenes/reqAccess";
 import AuditLogs from "scenes/auditLogs";
 import Radial from "scenes/radial";
+import ForgotPassword from "scenes/forgotPassword";
+import ResetPass from "scenes/resetPass";
+import ResetRequest from "scenes/resetReq";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -32,6 +36,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/resetRequest" element={<ResetRequest />} />
             <Route path="/request-access" element={<RequestAccess />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -44,10 +50,11 @@ function App() {
               <Route path="/daily" element={<Daily />} />
               <Route path="/monthly" element={<Monthly />} />
               <Route path="/breakdown" element={<Breakdown />} />
-              <Route path="/greater wealth" element={<Admin />} />
+              <Route path="/greater wealth" element={<GreaterWealth />} />
               <Route path="/performance" element={<Performance />} />
               <Route path="/audit logs" element={<AuditLogs/>} />
               <Route path="/radial" element={<Radial/>}/>
+              <Route path="/admin" element={<Admin/>} />
             </Route>
           </Routes>
         </ThemeProvider>
