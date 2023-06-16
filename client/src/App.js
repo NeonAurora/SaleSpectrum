@@ -38,6 +38,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="/resetRequest" element={<ResetRequest />} />
+            <Route path="/resetPass" element={<ResetPass />} />
             <Route path="/request-access" element={<RequestAccess />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
