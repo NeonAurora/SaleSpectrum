@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { JWT } from 'google-auth-library';
+import fs from 'fs';
 
 let otpMap = new Map();
 
@@ -103,10 +105,43 @@ export const forgotPass = async(req,res) => {
     // Store OTP in map
     otpMap.set(email, otp);
 
-    // Here you should normally send the OTP to the user's email address
+    const keys = JSON.parse(fs.readFileSync('credentials.json').toString());
 
-    // For testing purposes we will just send it in the response
-    res.status(200).json({ otp });
+    const client = new JWT({
+      email: keys.client_email,
+      key: keys.private_key,
+      scopes: ['https://www.googleapis.com/auth/gmail.send'],
+    });
+
+    const accessToken = await client.getAccessToken();
+    const smtpTransport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'eglebone@gmail.com',
+        clientId: keys.client_id,
+        clientSecret: keys.client_secret,
+        refreshToken: keys.refresh_token,
+        accessToken: accessToken.token,
+      },
+    });
+
+    const mailOptions = {
+      from: 'eglebone@gmail.com',
+      to: email,
+      subject: 'OTP for Password Reset',
+      text: `Your OTP is: ${otp}`,
+    };
+
+    smtpTransport.sendMail(mailOptions, (error, response) => {
+      if (error) {
+        console.log('Failed to send the email:', error);
+        return res.status(500).json({ message: 'Failed to send the email. Please try again.' });
+      } else {
+        console.log('Email sent');
+        res.status(200).json({ otp });
+      }
+    });
 
   } catch (error) {
     res.status(500).json({ message: "Something went wrong. Please try again." });
