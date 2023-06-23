@@ -105,7 +105,7 @@ export const forgotPass = async(req,res) => {
     // Store OTP in map
     otpMap.set(email, otp);
 
-    const keys = JSON.parse(fs.readFileSync('credentials.json').toString());
+    const keys = JSON.parse(fs.readFileSync('credentials2.json').toString());
 
     const client = new JWT({
       email: keys.client_email,
@@ -118,10 +118,7 @@ export const forgotPass = async(req,res) => {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: 'eglebone@gmail.com',
-        clientId: keys.client_id,
-        clientSecret: keys.client_secret,
-        refreshToken: keys.refresh_token,
+        user: 'eglebone@gmail.com', // the Gmail account you want to use to send emails
         accessToken: accessToken.token,
       },
     });
@@ -147,6 +144,7 @@ export const forgotPass = async(req,res) => {
     res.status(500).json({ message: "Something went wrong. Please try again." });
   }
 };
+
 
 
 export const verifyOTP = async(req,res) => {
