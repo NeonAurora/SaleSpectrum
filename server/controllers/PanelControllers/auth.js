@@ -133,12 +133,19 @@ export const forgotPass = async(req,res) => {
     smtpTransport.sendMail(mailOptions, (error, response) => {
       if (error) {
         console.log('Failed to send the email:', error);
-        return res.status(500).json({ message: 'Failed to send the email. Please try again.' });
+        console.error('Error Stack:', error.stack);
+        console.error('Error occurred during the transport:', error.response);
+        return res.status(500).json({ 
+          message: 'Failed to send the email. Please try again.', 
+          error: error.message, 
+          response: error.response 
+        });
       } else {
         console.log('Email sent');
         res.status(200).json({ otp });
       }
     });
+    
 
   } catch (error) {
     res.status(500).json({ message: "Something went wrong. Please try again." });
