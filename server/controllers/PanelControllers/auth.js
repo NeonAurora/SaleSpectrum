@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import SparkPost from 'sparkpost';
 
 let otpMap = new Map();
 
@@ -103,15 +104,41 @@ export const forgotPass = async(req,res) => {
     // Store OTP in map
     otpMap.set(email, otp);
 
-    // Here you should normally send the OTP to the user's email address
+    // Initialize SparkPost
+    const client = new SparkPost(process.env.SPARKPOST_API_KEY);
+    console.log('api_key', client);
 
-    // For testing purposes we will just send it in the response
-    res.status(200).json({ otp });
+    // Send email
+    client.transmissions.send({
+      options: {
+        sandbox: false // Disable sandbox mode
+      },
+      content: {
+        from: 'info@pass.ivan.solar', // Use your verified email
+        subject: 'Your OTP',
+        text: `Your OTP is ${otp}`
+      },
+      recipients: [
+        {address: email}
+      ]
+    })
+    .then(data => {
+      console.log('Woohoo! You just sent your first mailing!');
+      console.log(data);
+      res.status(200).json({ message: "OTP sent to email." });
+    })
+    .catch(err => {
+      console.log('Whoops! Something went wrong');
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong. Please try again." });
+    });
 
   } catch (error) {
     res.status(500).json({ message: "Something went wrong. Please try again." });
   }
 };
+
+
 
 
 export const verifyOTP = async(req,res) => {
