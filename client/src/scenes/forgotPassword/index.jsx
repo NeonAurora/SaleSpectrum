@@ -12,7 +12,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useRequestPasswordResetMutation, useVerifyOtpMutation, useResetPasswordMutation } from "state/resetApi";
 
-const ForgotPasswordPage = () => {
+const ForgotPassword = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -210,4 +210,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ForgotPassword;
