@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Navbar from "components/Layout/Navbar";
 import Sidebar from "components/Layout/Sidebar";
@@ -7,9 +7,11 @@ import Sidebar from "components/Layout/Sidebar";
 const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(isNonMobile);
+  const theme = useTheme();
 
   return (
     <Box
+      style={{ backgroundColor: theme.palette.primary[600] }}
       display="flex"
       flexDirection={isNonMobile ? "row" : "column"}
       width="100%"

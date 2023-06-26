@@ -50,19 +50,19 @@ export const searchTransaction = async (req, res) => {
     }
 
     const { audioMetadata } = transaction;
-    if (!audioMetadata) {
-      return res.status(404).json({ message: "Audio not found" });
-    }
+    let audioUrl = null;
 
-    const audioUrl = `http://${
-      req.headers.host
-    }/${audioMetadata.fileUrl.replace(/\\/g, "/")}`;
+    if (audioMetadata && audioMetadata.fileUrl) {
+      audioUrl = `http://${req.headers.host}/${audioMetadata.fileUrl.replace(/\\/g, "/")}`;
+    }
 
     res.json({ transactionData: transaction, audioUrl });
   } catch (error) {
-    res.status(500).json({ message: "Error: " + error });
+    console.error("Error while searching transaction: ", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 export const searchCustomTrade = async (req, res) => {
   try {

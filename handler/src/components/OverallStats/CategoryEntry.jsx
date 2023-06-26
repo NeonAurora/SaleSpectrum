@@ -11,7 +11,6 @@ const Category = ({
   const theme = useTheme();
   return (
     <div className="category-entry">
-      <input type="checkbox" className="category-checkbox" />
       <label>
         Category:
         <input
