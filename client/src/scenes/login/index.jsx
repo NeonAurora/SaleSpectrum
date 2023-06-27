@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { login } from "state/authSlice";
+import { setUserId } from "state";
 import { useLoginMutation } from "state/api";
 import { Google, Facebook, microsoft } from "@mui/icons-material";
 import { Check } from "@mui/icons-material";
@@ -33,13 +34,14 @@ const LoginPage = () => {
       console.log("Login data:", { email, password });
       const response = await loginMutation({ email, password });
       console.log("Login response:", response);
-  
+
       const { data } = response;
-  
+
       if (data && data.result && data.token) {
         // Store the token in local storage
         localStorage.setItem("token", data.token);
         dispatch(login(data.result));
+        dispatch(setUserId(data.result._id));
         navigate("/dashboard");
       } else {
         console.error("Unexpected login response:", response);
@@ -50,7 +52,6 @@ const LoginPage = () => {
       // Handle login errors, e.g., show a notification
     }
   };
-  
 
   return (
     <Container
@@ -113,7 +114,7 @@ const LoginPage = () => {
             variant="text"
             color="secondary"
             onClick={() => {
-              // Add logic for handling forget password here
+              navigate("/forgotPassword");
             }}
             sx={{
               textTransform: "none",
@@ -145,7 +146,7 @@ const LoginPage = () => {
             variant="text"
             color="secondary"
             onClick={() => {
-              // Add logic for handling create an account here
+              navigate("/request-access");
             }}
             sx={{ textTransform: "none" }}
           >

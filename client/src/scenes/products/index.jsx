@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import Header from "components/Header";
 import { useGetProductsQuery } from "state/api";
+import LoadingScene from "components/LoadingScene";
 
 const Product = ({
   _id,
@@ -130,7 +131,14 @@ const Products = () => {
           )}
         </Box>
       ) : (
-        <>Loading...</>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="70vh"
+        >
+          <LoadingScene />
+        </Box>
       )}
     </Box>
   );

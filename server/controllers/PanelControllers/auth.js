@@ -1,6 +1,12 @@
 import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+import SparkPost from 'sparkpost';
+
+let otpMap = new Map();
+
 
 export const register = async (req, res) => {
   const {
@@ -78,6 +84,102 @@ export const login = async (req, res) => {
     res
       .status(500)
       .json({ message: "Something went wrong. Please try again." });
+  }
+};
+
+
+export const forgotPass = async(req,res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Generate OTP
+    const otp = crypto.randomBytes(3).toString('hex');
+
+    // Store OTP in map
+    otpMap.set(email, otp);
+
+    // Initialize SparkPost
+    const client = new SparkPost(process.env.SPARKPOST_API_KEY);
+    console.log('api_key', client);
+
+    // Send email
+    client.transmissions.send({
+      options: {
+        sandbox: false // Disable sandbox mode
+      },
+      content: {
+        from: 'info@pass.ivan.solar', // Use your verified email
+        subject: 'Your OTP',
+        text: `Your OTP is ${otp}`
+      },
+      recipients: [
+        {address: email}
+      ]
+    })
+    .then(data => {
+      console.log('Woohoo! You just sent your first mailing!');
+      console.log(data);
+      res.status(200).json({ message: "OTP sent to email." });
+    })
+    .catch(err => {
+      console.log('Whoops! Something went wrong');
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong. Please try again." });
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong. Please try again." });
+  }
+};
+
+
+
+
+export const verifyOTP = async(req,res) => {
+  const { email, otp } = req.body;
+
+  try {
+    const validOTP = otpMap.get(email);
+
+    if (!validOTP || validOTP !== otp) {
+      return res.status(400).json({ message: "Invalid OTP." });
+    }
+
+    res.status(200).json({ message: "OTP verified." });
+
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong. Please try again." });
+  }
+};
+
+
+export const resetPass = async(req,res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+    await user.save();
+
+    // Remove the OTP from the map after resetting the password
+    otpMap.delete(email);
+
+    res.status(200).json({ message: "Password reset successful." });
+
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong. Please try again." });
   }
 };
 

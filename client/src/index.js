@@ -7,15 +7,17 @@ import globalReducer from "state";
 import { Provider } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "state/api";
-import { adminAuditApi } from "state/adminAuditApi";  // ensure this path is correct
+import { adminAuditApi } from "state/adminAuditApi"; 
+import { resetApi } from "state/resetApi";
 
 const store = configureStore({
   reducer: {
     global: globalReducer,
     [api.reducerPath]: api.reducer,
     [adminAuditApi.reducerPath]: adminAuditApi.reducer,
+    [resetApi.reducerPath]: resetApi.reducer,
   },
-  middleware: (getDefault) => getDefault().concat(api.middleware, adminAuditApi.middleware),
+  middleware: (getDefault) => getDefault().concat(api.middleware, adminAuditApi.middleware, resetApi.middleware),
 });
 
 setupListeners(store.dispatch);

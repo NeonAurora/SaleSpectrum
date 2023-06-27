@@ -2,13 +2,23 @@ import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { useGetSalesQuery } from "state/api";
+import LoadingScene from "./LoadingScene";
 
 const BreakdownChart = ({ isDashboard = false }) => {
   const { data, isLoading } = useGetSalesQuery();
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
 
-  if (!data || isLoading) return "Loading...";
+  if (!data || isLoading) return (
+    <Box sx={{ 
+      display: "flex", 
+      justifyContent: "center", 
+      alignItems: "center", 
+      height: "70vh" 
+    }}>
+      <LoadingScene />
+    </Box>
+  );
 
   const colors = [
     theme.palette.secondary[500],

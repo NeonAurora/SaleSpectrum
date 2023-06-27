@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Box, Typography, FormControl, TextField, Button } from "@mui/material";
+import { useTheme } from "@mui/material";
 import UserSearchForm from "components/Users/UserSearchForm";
 import UserEditSearchForm from "components/Users/UserEditForm";
 import userService from "services/usersService";
@@ -8,6 +10,8 @@ const UserSearch = () => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
+
+  const theme = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,32 +42,63 @@ const UserSearch = () => {
   };
 
   return (
-    <div>
-      <h1>Search User</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter the ID of the user you want to search for:
-          <input
+    <Box
+      component="div"
+      sx={{
+        backgroundColor: theme.palette.background.alt,
+        padding: "2rem",
+        borderRadius: "0.55rem",
+        boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <Typography variant="h4" color="secondary">
+        Search User
+      </Typography>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          marginTop: "2rem",
+        }}
+      >
+        <FormControl>
+          <TextField
+            id="user-id"
+            label="Enter the ID of the user you want to search for:"
             type="text"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
+            variant="outlined"
+            sx={{ flex: "1" }}
           />
-        </label>
-        <button type="submit">Search</button>
-      </form>
-      <div>
-        {error && <p>{error}</p>}
+        </FormControl>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ height: "56px", flexShrink: 0 }}
+        >
+          Search
+        </Button>
+      </Box>
+      <Box component="div" sx={{ marginTop: "2rem" }}>
+        {error && <Typography color="error">{error}</Typography>}
         {userData && !editMode && (
           <>
             <UserSearchForm userData={userData} />
-            <button onClick={handleEdit}>Edit user</button>
+            <Button onClick={handleEdit} variant="contained" color="primary">
+              Edit user
+            </Button>
           </>
         )}
         {userData && editMode && (
           <UserEditSearchForm userData={userData} onConfirm={handleConfirm} />
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
