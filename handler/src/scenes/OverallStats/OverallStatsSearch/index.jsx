@@ -11,6 +11,7 @@ import { useTheme } from "@mui/system";
 import DisplayForm from "components/OverallStats/OverallStatSearchFrom";
 import EditForm from "components/OverallStats/OverallStatEditForm";
 import overallStatService from "services/overallStatService";
+import LoadingScene from "components/LoadingScene";
 
 const OverallStatsSearch = () => {
   const theme = useTheme();
@@ -18,11 +19,12 @@ const OverallStatsSearch = () => {
   const [documentData, setDocumentData] = useState(null);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+    setIsLoading(true);
     try {
       const response = await overallStatService.searchOverallStat(documentId);
       const data = response.data;
@@ -30,6 +32,8 @@ const OverallStatsSearch = () => {
     } catch (error) {
       setDocumentData(null);
       setError("Error: Document not found");
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -92,6 +96,7 @@ const OverallStatsSearch = () => {
       </Box>
       <Box component="div" sx={{ marginTop: "2rem" }}>
         {error && <Typography color="error">{error}</Typography>}
+        {isLoading && <LoadingScene />}
         {documentData && !editMode && (
           <>
             <DisplayForm documentData={documentData} />

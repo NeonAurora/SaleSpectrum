@@ -162,7 +162,7 @@ const OverallStatsInsertion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const data = {
       totalCustomers,
       yearlySalesTotal,
@@ -174,15 +174,17 @@ const OverallStatsInsertion = () => {
         categories.map((entry) => [entry.category, entry.sales])
       ),
     };
-
+  
     try {
-      await overallStatService.addOverallStat(data);
-      alert("Data submitted successfully");
+      const response = await overallStatService.addOverallStat(data); // Capture the response here
+      const savedObjectId = response.data._id; // Access the ID of the saved object from the response
+      alert("Data submitted successfully. Saved Object ID: " + savedObjectId); // Display the ID in the alert
     } catch (error) {
       alert("Error submitting data: " + error.message);
     }
     
   };
+  
 
   return (
     <Box
