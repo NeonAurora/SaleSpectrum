@@ -8,7 +8,8 @@ import { useTheme } from "@mui/material";
 function Navbar() {
   const theme = useTheme();
   const location = useLocation();
-  const currentPath = location.pathname.split("/")[1];
+  let currentPath = location.pathname.split("/")[1];
+  currentPath = currentPath === "" ? "overallStats" : currentPath;
 
   return (
     <AppBar
