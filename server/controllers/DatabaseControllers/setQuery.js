@@ -4,6 +4,8 @@ import ProductStat from "../../models/ProductStat.js";
 import Transaction from "../../models/Transaction.js";
 import CustomTrade from "../../models/CustomTrade.js";
 import User from "../../models/User.js";
+import TempStat from "../../models/TempStat.js";
+
 
 export const updateOverallStat = async (req, res) => {
   try {
@@ -172,5 +174,24 @@ export const updateStat = async (req, res) => {
     res.json(updatedStat);
   } catch (error) {
     res.status(400).json({ message: "Error: " + error });
+  }
+};
+
+
+export const updateTempStat = async (req, res) => {
+  try {
+    const updatedStat = await TempStat.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedStat) {
+      return res.status(404).json({ message: "Stat not found" });
+    }
+
+    res.json(updatedStat);
+  } catch (error) {
+    res.status(400).json({ message: `Error: ${error}` });
   }
 };

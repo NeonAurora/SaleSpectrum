@@ -4,6 +4,7 @@ import ProductStat from "../../models/ProductStat.js";
 import Transaction from "../../models/Transaction.js";
 import User from "../../models/User.js";
 import CustomTrade from "../../models/CustomTrade.js";
+import TempStat from "../../models/TempStat.js";
 
 export const deleteOverallStat = async (req, res) => {
   try {
@@ -88,6 +89,21 @@ export const deleteCustomTrade = async (req, res) => {
     }
 
     res.json({ message: "CustomTrade deleted successfully" });
+  } catch (error) {
+    console.error("Delete Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const deleteTempStat = async (req, res) => {
+  try {
+    const data = await TempStat.findByIdAndDelete(req.params.id);
+
+    if (!data) {
+      return res.status(404).json({ message: "Data not found" });
+    }
+
+    res.json({ message: "Data deleted successfully" });
   } catch (error) {
     console.error("Delete Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });

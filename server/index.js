@@ -14,6 +14,7 @@ import userRoutes from "./routes/OperateRoutes/userRoutes.js";
 import productsRoutes from "./routes/OperateRoutes/productsRoutes.js";
 import productStatsRoutes from "./routes/OperateRoutes/productStatsRoutes.js";
 import customTradeRoutes from "./routes/OperateRoutes/customTradeRoutes.js";
+import tempStatRoutes from "./routes/OperateRoutes/tempStatRoutes.js";
 import connectDB from "./config/database.js";
 import authRoutes from "./routes/DisplayRoutes/auth.js";
 import authMiddleware from "./middleware/authMiddleware.js";
@@ -70,7 +71,7 @@ app.use(cors());
 
 /* ROUTES */
 app.use("/auth", authRoutes);
-app.use("/client", clientRoutes); // add middleware 
+app.use("/client", authMiddleware, clientRoutes); // add middleware 
 // app.use("/client", clientRoutes);
 app.use("/general", authMiddleware, generalRoutes);  
 app.use("/management", authMiddleware, managementRoutes);
@@ -81,6 +82,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/productStats", productStatsRoutes);
 app.use("/api/customTrades", customTradeRoutes);
+app.use("/api/tempStats", tempStatRoutes);
 app.use("/uploads", express.static("uploads")); // Add this line to serve audio files
 
 /* MONGOOSE SETUP */

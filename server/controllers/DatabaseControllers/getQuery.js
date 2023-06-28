@@ -3,6 +3,7 @@ import OverallStat from "../../models/OverallStat.js";
 import Product from "../../models/Product.js";
 import ProductStat from "../../models/ProductStat.js";
 import Transaction from "../../models/Transaction.js";
+import TempStat from "../../models/TempStat.js";
 import User from "../../models/User.js";
 
 export const searchOverallStat = async (req, res) => {
@@ -96,5 +97,17 @@ export const searchStat = async (req, res) => {
     res.json(stat);
   } catch (error) {
     res.status(500).json({ message: "Error: " + error });
+  }
+};
+
+export const searchTempStat = async (req, res) => {
+  try {
+    const stat = await TempStat.findById(req.params.id);
+    if (!stat) {
+      return res.status(404).json({ message: "Stat not found" });
+    }
+    res.json(stat);
+  } catch (error) {
+    res.status(500).json({ message: `Error: ${error}` });
   }
 };

@@ -4,6 +4,7 @@ import ProductStat from "../../models/ProductStat.js";
 import Transaction from "../../models/Transaction.js";
 import User from "../../models/User.js";
 import CustomTrade from "../../models/CustomTrade.js";
+import TempStat from "../../models/TempStat.js";
 import bcrypt from "bcryptjs";
 
 export const addOverallStat = async (req, res) => {
@@ -111,6 +112,16 @@ export const addStat = async (req, res) => {
     res.status(201).json(savedStat);
   } catch (error) {
     console.error("Error:", error);
+    res.status(400).json({ message: "Error: " + error });
+  }
+};
+
+export const addTempStat = async (req, res) => {
+  try {
+    const newStat = new TempStat(req.body);
+    const savedStat = await newStat.save();
+    res.status(201).json(savedStat);
+  } catch (error) {
     res.status(400).json({ message: "Error: " + error });
   }
 };
