@@ -25,7 +25,7 @@ export const updateOverallStat = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const updatedStat = await Products.findByIdAndUpdate(
+    const updatedStat = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true, runValidators: true }
@@ -116,6 +116,7 @@ export const updateCustomTrade = async (req, res) => {
       customTradeData,
       { new: true }
     );
+    console.log(req.params);
 
     if (!updatedCustomTrade) {
       return res.status(404).json({ message: "CustomTrade not found" });

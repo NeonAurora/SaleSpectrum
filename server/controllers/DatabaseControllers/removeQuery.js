@@ -3,6 +3,7 @@ import Product from "../../models/Product.js";
 import ProductStat from "../../models/ProductStat.js";
 import Transaction from "../../models/Transaction.js";
 import User from "../../models/User.js";
+import CustomTrade from "../../models/CustomTrade.js";
 
 export const deleteOverallStat = async (req, res) => {
   try {
@@ -21,7 +22,7 @@ export const deleteOverallStat = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const data = await Products.findByIdAndDelete(req.params._id);
+    const data = await Product.findByIdAndDelete(req.params._id);
 
     if (!data) {
       return res.status(404).json({ message: "Data not found" });
@@ -72,6 +73,21 @@ export const deleteStat = async (req, res) => {
     }
 
     res.json({ message: "Data deleted successfully" });
+  } catch (error) {
+    console.error("Delete Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const deleteCustomTrade = async (req, res) => {
+  try {
+    const data = await CustomTrade.findByIdAndDelete(req.params.id);
+
+    if (!data) {
+      return res.status(404).json({ message: "CustomTrade not found" });
+    }
+
+    res.json({ message: "CustomTrade deleted successfully" });
   } catch (error) {
     console.error("Delete Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });

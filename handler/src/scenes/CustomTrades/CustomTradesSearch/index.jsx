@@ -37,19 +37,23 @@ const CustomTradeSearch = () => {
       const updatedCustomTradeData = {
         ...customTradeData,
       };
-
+  
       // Update custom trade data
       const response = await customTradeService.updateCustomTrade(
         customTradeId,
         updatedCustomTradeData
       );
-
+  
       console.log("Response from updateCustomTrade API call:", response);
-
+  
+      if (response.status !== 200) {
+        throw new Error('Failed to update custom trade data');
+      }
+  
       if (customTradeData.newAudioFile) {
         const formData = new FormData();
         formData.append("newAudio", customTradeData.newAudioFile);
-        const audioResponse = await customTradeService.updateCustomAudio(
+        const audioResponse = await customTradeService.updateAudio(
           customTradeId,
           formData
         );
@@ -58,19 +62,29 @@ const CustomTradeSearch = () => {
           const { customTradeData: updatedData, audioUrl } =
             await customTradeService.searchCustomTrade(customTradeId);
           setCustomTradeData({ ...updatedData, audioUrl });
-
+  
           // Clear the input field for the audio file
           if (audioFileInput && audioFileInput.current) {
             audioFileInput.current.value = "";
           }
+  
+          // If all operations are successful, reset the edit mode and show success message
+          setEditMode(false);
+          alert('Custom trade and audio file updated successfully');
         } else {
-          alert("Error updating audio file. Please try again.");
+          throw new Error('Failed to update audio file');
         }
+      } else {
+        // If no audio file is updated, still show success message and reset the edit mode
+        setEditMode(false);
+        alert('Custom trade updated successfully');
       }
     } catch (error) {
       alert("Error updating custom trade. Please try again.");
+      console.error(error); // For debugging purposes
     }
   };
+  
 
   const handleCancelClick = () => {
     setEditMode(false);

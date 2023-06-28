@@ -5,16 +5,15 @@ import { useTheme } from "@mui/system";
 
 const UserDeletion = () => {
   const [_id, setId] = useState("");
-  const [message, setMessage] = useState("");
   const theme = useTheme();
 
   const onDelete = async (e) => {
     e.preventDefault();
     try {
       const res = await userService.deleteUser(_id);
-      setMessage(res.data.message);
+      alert(res.data.message);
     } catch (error) {
-      setMessage("Error deleting user");
+      alert("Error deleting user");
     }
   };
 
@@ -48,7 +47,6 @@ const UserDeletion = () => {
           Delete
         </Button>
       </Box>
-      {message && <Typography variant="body1">{message}</Typography>}
     </Box>
   );
 };

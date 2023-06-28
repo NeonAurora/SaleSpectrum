@@ -10,15 +10,19 @@ const CustomTradesDelete = () => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    setMessage("");
-
     try {
-      await customTradeService.deleteCustomTrade(customTradeId);
-      setMessage("Custom trade successfully deleted.");
+      const response = await customTradeService.deleteCustomTrade(customTradeId);
+      if (response.status === 200) {
+        alert("Custom trade successfully deleted.");
+      } else {
+        alert("Error: Failed to delete custom trade.");
+      }
     } catch (error) {
-      setMessage("Error: Failed to delete custom trade.");
+      console.error(error);
+      alert("Error: Failed to delete custom trade.");
     }
   };
+
 
   return (
     <Box

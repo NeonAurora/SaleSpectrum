@@ -86,12 +86,14 @@ const UserInsertion = () => {
 
     try {
       console.log("User data:", userData); // Add this line to log the data
-      await userService.addUser(userData);
-      alert("User data submitted successfully");
+      const response = await userService.addUser(userData);
+      const savedUserId = response.data._id; // Access the ID of the saved user from the response
+      alert("User data submitted successfully. Saved User ID: " + savedUserId); // Display the ID in the alert
     } catch (error) {
       alert("Error submitting user data: " + error.message);
     }
   };
+
   const generateRandomTransactions = (count) => {
     const randomStrings = [];
     const characters =

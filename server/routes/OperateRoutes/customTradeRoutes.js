@@ -1,7 +1,7 @@
 import express from "express";
 import { addCustomTrade } from "../../controllers/DatabaseControllers/addQuery.js";
-// import { searchCustomTrade } from "../../controllers/DatabaseControllers/getQuery.js";
-// import { deleteCustomTrade } from "../../controllers/DatabaseControllers/removeQuery.js";
+import { searchCustomTrade } from "../../controllers/DatabaseControllers/getQuery.js";
+import { deleteCustomTrade } from "../../controllers/DatabaseControllers/removeQuery.js";
 import { updateCustomTrade } from "../../controllers/DatabaseControllers/setQuery.js";
 import { updateCustomAudio } from "../../controllers/DatabaseControllers/setQuery.js";
 import multer from "multer";
@@ -20,8 +20,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/add", upload.single("audio"), addCustomTrade);
-// router.get("/search/:id", searchCustomTrade); 
-// router.delete("/delete/:id", deleteCustomTrade);
+router.get("/search/:id", searchCustomTrade); 
+router.delete("/delete/:id", deleteCustomTrade);
 router.put("/update/:id", updateCustomTrade);
 router.put("/update-audio/:id", upload.single("newAudio"), updateCustomAudio);
 

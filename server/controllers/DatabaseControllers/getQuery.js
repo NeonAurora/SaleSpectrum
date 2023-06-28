@@ -66,12 +66,12 @@ export const searchTransaction = async (req, res) => {
 
 export const searchCustomTrade = async (req, res) => {
   try {
-    const transaction = await CustomTrade.findById(req.params.id);
-    if (!transaction) {
-      return res.status(404).json({ message: "Transaction not found" });
+    const customTrade = await CustomTrade.findById(req.params.id);
+    if (!customTrade) {
+      return res.status(404).json({ message: "CustomTrade not found" });
     }
 
-    const { audioMetadata } = transaction;
+    const { audioMetadata } = customTrade;
     if (!audioMetadata) {
       return res.status(404).json({ message: "Audio not found" });
     }
@@ -80,7 +80,7 @@ export const searchCustomTrade = async (req, res) => {
       req.headers.host
     }/${audioMetadata.fileUrl.replace(/\\/g, "/")}`;
 
-    res.json({ transactionData: transaction, audioUrl });
+    res.json({ customTradeData: customTrade, audioUrl });
   } catch (error) {
     res.status(500).json({ message: "Error: " + error });
   }

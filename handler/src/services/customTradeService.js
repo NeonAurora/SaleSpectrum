@@ -25,8 +25,9 @@ const updateCustomTrade = async (customTradeId, updatedCustomTradeData) => {
     `${API_URL}/update/${customTradeId}`,
     updatedCustomTradeData
   );
-  return response.data;
+  return response;
 };
+
 
 const deleteCustomTrade = async (customTradeId) => {
   return axios.delete(`${API_URL}/delete/${customTradeId}`);

@@ -45,12 +45,14 @@ const ProductInsertion = () => {
     e.preventDefault();
 
     try {
-      await productService.addProduct(productData);
-      alert("Product data submitted successfully");
+      const response = await productService.addProduct(productData);
+      const savedObjectId = response.data._id;
+      alert("Product data submitted successfully. Saved Object ID: " + savedObjectId);
     } catch (error) {
       alert("Error submitting product data: " + error.message);
     }
   };
+
 
   const handleEntryTest = () => {
     const randomName = getRandomString(10);

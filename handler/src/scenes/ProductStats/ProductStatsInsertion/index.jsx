@@ -122,7 +122,7 @@ const ProductStatsInsertion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const data = {
       userID,
       yearlySalesTotal,
@@ -131,14 +131,15 @@ const ProductStatsInsertion = () => {
       monthlyData: monthlyData,
       dailyData: dailyData,
     };
-
+  
     try {
-      await productStatService.addProductStat(data);
-      alert("Data submitted successfully");
+      const response = await productStatService.addProductStat(data);
+      alert("Data submitted successfully. New object ID: " + response.data._id);
     } catch (error) {
       alert("Error submitting data: " + error.message);
     }
   };
+  
 
   return (
     <Box

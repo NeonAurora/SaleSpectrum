@@ -6,15 +6,16 @@ import productStatService from "services/productStatService";
 const ProductStatsDeletion = () => {
   const theme = useTheme();
   const [_id, setId] = useState("");
-  const [message, setMessage] = useState("");
 
   const onDelete = async (e) => {
     e.preventDefault();
     try {
       const res = await productStatService.deleteProductStat(_id);
-      setMessage(res.data.message);
+      // use alert instead of setMessage
+      window.alert(res.data.message);
     } catch (error) {
-      setMessage("Error deleting data");
+      // use alert instead of setMessage in case of error as well
+      window.alert("Error deleting data: " + error.message);
     }
   };
 
@@ -49,7 +50,6 @@ const ProductStatsDeletion = () => {
           Delete
         </Button>
       </Box>
-      {message && <Typography variant="body1">{message}</Typography>}
     </Box>
   );
 };

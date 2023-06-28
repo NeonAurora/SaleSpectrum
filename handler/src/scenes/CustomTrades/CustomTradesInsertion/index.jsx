@@ -62,11 +62,14 @@ const CustomTradeInsertion = () => {
 
     try {
       const response = await customTradeService.addCustomTrade(formData);
-      console.log(response);
+      alert("Successfully created a new trade. The ID is: " + response.data._id);
     } catch (error) {
       console.error(error);
+      alert("Error submitting data: " + error.message);
     }
   };
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
