@@ -113,7 +113,9 @@ const TransactionSearch = () => {
       console.error("Error object:", error); // Add this line to log the error object itself
       alert("Error updating transaction. Please try again.");
     }
-  };
+    setEditMode(false);
+};
+
 
   const handleCancelClick = () => {
     setEditMode(false);

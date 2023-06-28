@@ -10,15 +10,15 @@ const TransactionsDelete = () => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    setMessage("");
 
     try {
       await transactionService.deleteTransaction(transactionId);
-      setMessage("Transaction successfully deleted.");
+      alert("Transaction successfully deleted.");
     } catch (error) {
-      setMessage("Error: Failed to delete transaction.");
+      alert("Error: Failed to delete transaction.");
     }
-  };
+};
+
 
   return (
     <Box
@@ -39,7 +39,6 @@ const TransactionsDelete = () => {
           Delete
         </Button>
       </Box>
-      {message && <Typography variant="body1">{message}</Typography>}
     </Box>
   );
 };

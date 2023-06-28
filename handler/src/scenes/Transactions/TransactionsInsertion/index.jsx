@@ -25,6 +25,7 @@ const TransactionsInsertion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const currentTransactionData = {
       userId,
       cost: cost.toString(),
@@ -35,7 +36,11 @@ const TransactionsInsertion = () => {
 
     // Create a FormData object and append the audio file
     const formData = new FormData();
-    formData.append("audio", audioFile);
+    if(audioFile) {
+        formData.append("audio", audioFile);
+    } else {
+        alert("No audio file selected. The form will be submitted without an audio file.");
+    }
 
     // Append the transaction data as a JSON string
     formData.append(
@@ -46,10 +51,15 @@ const TransactionsInsertion = () => {
     try {
       const response = await transactionService.addTransaction(formData);
       console.log(response);
+      const savedObjectId = response.data._id; // Access the ID of the saved object from the response
+      alert("Data submitted successfully. Saved Object ID: " + savedObjectId); // Display the ID in the alert
     } catch (error) {
       console.error(error);
+      alert("Error submitting data: " + error.message); // Display the error message in the alert
     }
-  };
+};
+
+
 
   const handleProductChange = (id, field, value) => {
     setProducts((prevProducts) => {

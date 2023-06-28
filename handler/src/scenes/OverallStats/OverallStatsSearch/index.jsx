@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Button,
@@ -51,6 +51,8 @@ const OverallStatsSearch = () => {
     }
   };
 
+  const memoizedDocumentData = useMemo(() => documentData, [documentData]);
+
   return (
     <Box
       component="div"
@@ -99,7 +101,7 @@ const OverallStatsSearch = () => {
         {isLoading && <LoadingScene />}
         {documentData && !editMode && (
           <>
-            <DisplayForm documentData={documentData} />
+            <DisplayForm documentData={memoizedDocumentData} />
             <Button
               onClick={handleEdit}
               variant="contained"

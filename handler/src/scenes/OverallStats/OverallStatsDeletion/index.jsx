@@ -5,16 +5,15 @@ import overallStatService from "services/overallStatService";
 
 const OverallStatsDeletion = () => {
   const [_id, setId] = useState("");
-  const [message, setMessage] = useState("");
   const theme = useTheme();
 
   const onDelete = async (e) => {
     e.preventDefault();
     try {
       const res = await overallStatService.deleteOverallStat(_id);
-      setMessage(res.data.message);
+      window.alert(res.data.message); // display message as alert
     } catch (error) {
-      setMessage("Error deleting data");
+      window.alert("Error deleting data"); // display error message as alert
     }
   };
 
@@ -37,7 +36,6 @@ const OverallStatsDeletion = () => {
           Delete
         </Button>
       </Box>
-      {message && <Typography variant="body1">{message}</Typography>}
     </Box>
   );
 };

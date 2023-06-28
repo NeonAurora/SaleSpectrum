@@ -40,16 +40,20 @@ export const addProductStat = async (req, res) => {
 
 export const addTransaction = async (req, res) => {
   try {
-    const audioMetadata = {
-      fileUrl: req.file.path,
-      title: req.body.title,
-      duration: req.body.duration,
-      format: req.body.format,
-      bitrate: req.body.bitrate,
-      sampleRate: req.body.sampleRate,
-      channels: req.body.channels,
-      fileSize: req.body.fileSize,
-    };
+    let audioMetadata = {};
+
+    if(req.file) {
+      audioMetadata = {
+        fileUrl: req.file.path,
+        title: req.body.title,
+        duration: req.body.duration,
+        format: req.body.format,
+        bitrate: req.body.bitrate,
+        sampleRate: req.body.sampleRate,
+        channels: req.body.channels,
+        fileSize: req.body.fileSize,
+      };
+    }
 
     const transactionData = JSON.parse(req.body.transactionData);
     const newTransaction = new Transaction({
@@ -62,6 +66,7 @@ export const addTransaction = async (req, res) => {
     res.status(400).json({ message: "Error: " + error });
   }
 };
+
 
 export const addCustomTrade = async (req, res) => {
   try {
