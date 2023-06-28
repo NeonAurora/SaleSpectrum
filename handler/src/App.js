@@ -9,6 +9,7 @@ import UsersPage from "scenes/Users";
 import ProductsPage from "scenes/Products";
 import ProductStatPage from "scenes/ProductStats";
 import CustomTradePage from "scenes/CustomTrades";
+import TempStatPage from "scenes/TempStats";
 import Layout from "scenes/Layout";
 import SubpageContext from "components/Routings/SubpageContext";
 
@@ -21,18 +22,19 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           {/* <SubpageContext.Provider value={{ activeSubpage, setActiveSubpage }}> */}
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<OverallStatPage />} />
-                <Route path="/overallStats/*" element={<OverallStatPage />} />
-                <Route path="/transactions/*" element={<TransactionPage />} />
-                <Route path="/users/*" element={<UsersPage />} />
-                <Route path="/products/*" element={<ProductsPage />} />
-                <Route path="/productStats/*" element={<ProductStatPage />} />
-                <Route path="/customTrades/*" element={<CustomTradePage />} />
-              </Route>
-              {/* Add your other routes here */}
-            </Routes>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<OverallStatPage />} />
+              <Route path="/overallStats/*" element={<OverallStatPage />} />
+              <Route path="/transactions/*" element={<TransactionPage />} />
+              <Route path="/users/*" element={<UsersPage />} />
+              <Route path="/products/*" element={<ProductsPage />} />
+              <Route path="/productStats/*" element={<ProductStatPage />} />
+              <Route path="/customTrades/*" element={<CustomTradePage />} />
+              <Route path="/tempStats/*" element={<TempStatPage />} />
+            </Route>
+            {/* Add your other routes here */}
+          </Routes>
           {/* </SubpageContext.Provider> */}
         </ThemeProvider>
       </BrowserRouter>

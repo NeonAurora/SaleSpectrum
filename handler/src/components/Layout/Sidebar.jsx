@@ -39,6 +39,7 @@ const Sidebar = ({ user, drawerWidth, isSidebarOpen, setIsSidebarOpen, isNonMobi
     { label: "Products", path: "/products", icon: <ReceiptLongOutlined /> },
     { label: "Product Stats", path: "/productStats", icon: <PublicOutlined /> },
     { label: "Custom Trades", path: "/customTrades", icon: <PointOfSaleOutlined /> },
+    { label: "Temp Stats", path: "/tempStats", icon: <PointOfSaleOutlined /> },
     // Add more pages here with respective icons
   ];
   

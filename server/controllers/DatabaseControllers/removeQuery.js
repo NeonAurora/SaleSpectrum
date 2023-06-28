@@ -100,6 +100,8 @@ export const deleteTempStat = async (req, res) => {
     const data = await TempStat.findByIdAndDelete(req.params.id);
 
     if (!data) {
+      console.log('function got hit');
+      console.log(req.params.id);
       return res.status(404).json({ message: "Data not found" });
     }
 

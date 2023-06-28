@@ -7,14 +7,14 @@ import {
   FormControl,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
-import ProductSearchForm from "components/Products/ProductSearchForm";
-import ProductEditForm from "components/Products/ProductEditForm";
-import productService from "services/productsService";
+import DisplayForm from "components/TempStats/TempStatSearchForm";
+import EditForm from "components/TempStats/TempStatEditForm";
+import tempStatService from "services/tempStatService";
 
-const ProductSearch = () => {
+const TempStatsSearch = () => {
   const theme = useTheme();
-  const [productId, setProductId] = useState("");
-  const [productData, setProductData] = useState(null);
+  const [documentId, setDocumentId] = useState("");
+  const [documentData, setDocumentData] = useState(null);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
 
@@ -23,12 +23,12 @@ const ProductSearch = () => {
     setError("");
 
     try {
-      const response = await productService.searchProduct(productId);
+      const response = await tempStatService.searchTempStat(documentId);
       const data = response.data;
-      setProductData(data);
+      setDocumentData(data);
     } catch (error) {
-      setProductData(null);
-      setError("Error: Product not found");
+      setDocumentData(null);
+      setError("Error: Document not found");
     }
   };
 
@@ -38,14 +38,15 @@ const ProductSearch = () => {
 
   const handleConfirm = async (updatedData) => {
     try {
-      await productService.updateProduct(productId, updatedData);
-      setProductData(updatedData);
+      await tempStatService.updateTempStat(documentId, updatedData);
+      setDocumentData(updatedData);
       setEditMode(false);
       alert("Data updated successfully!");
     } catch (error) {
-      setError("Error: Failed to update the product");
+      setError("Error: Failed to update the document");
     }
   };
+  
 
   return (
     <Box
@@ -58,7 +59,7 @@ const ProductSearch = () => {
       }}
     >
       <Typography variant="h4" color="secondary">
-        Search Product
+        Search Temp Data
       </Typography>
       <Box
         component="form"
@@ -72,11 +73,11 @@ const ProductSearch = () => {
       >
         <FormControl>
           <TextField
-            id="product-id"
-            label="Enter the ID of the product you want to search for:"
+            id="tempStat-id"
+            label="Enter the ID of the document you want to search for:"
             type="text"
-            value={productId}
-            onChange={(e) => setProductId(e.target.value)}
+            value={documentId}
+            onChange={(e) => setDocumentId(e.target.value)}
             variant="outlined"
             sx={{ flex: "1" }}
           />
@@ -92,28 +93,25 @@ const ProductSearch = () => {
       </Box>
       <Box component="div" sx={{ marginTop: "2rem" }}>
         {error && <Typography color="error">{error}</Typography>}
-        {productData && !editMode && (
+        {documentData && !editMode && (
           <>
-            <ProductSearchForm productData={productData} />
+            <DisplayForm documentData={documentData} />
             <Button
               onClick={handleEdit}
               variant="contained"
               color="secondary"
               sx={{ marginTop: "1rem" }}
             >
-              Edit product
+              Edit records
             </Button>
           </>
         )}
-        {productData && editMode && (
-          <ProductEditForm
-            productData={productData}
-            onConfirm={handleConfirm}
-          />
+        {documentData && editMode && (
+          <EditForm documentData={documentData} onConfirm={handleConfirm} />
         )}
       </Box>
     </Box>
   );
 };
 
-export default ProductSearch;
+export default TempStatsSearch;

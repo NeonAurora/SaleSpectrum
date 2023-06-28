@@ -9,7 +9,7 @@ const router = express.Router();
 // Router definitions
 router.post("/add", addTempStat);
 router.get("/search/:id", searchTempStat);
-router.delete("/delete/:_id", deleteTempStat);
+router.delete("/delete/:id", deleteTempStat);
 router.put("/update/:id", updateTempStat);
 
 export default router;
