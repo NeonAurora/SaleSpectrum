@@ -1,4 +1,5 @@
 import React from "react";
+import Papa from "papaparse";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
 import {
@@ -29,7 +30,7 @@ const Dashboard = () => {
   const { data, isLoading } = useGetDashboardQuery();
   console.log("data", data);
   const { statsData, isLoading1 } = useGetStatsQuery();
-  console.log('statsData:', statsData);
+  console.log("statsData:", statsData);
 
   const columns = [
     {
@@ -63,6 +64,19 @@ const Dashboard = () => {
     },
   ];
 
+  const generateCSV = (data) => {
+    const csv = Papa.unparse(data);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.setAttribute("download", "report.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween
@@ -76,6 +90,7 @@ const Dashboard = () => {
 
         <Box>
           <Button
+            onClick={() => generateCSV(data && data.transactions)}
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,

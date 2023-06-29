@@ -7,10 +7,15 @@ import {
   Typography,
   useTheme,
   IconButton,
+  Snackbar,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useRequestPasswordResetMutation, useVerifyOtpMutation, useResetPasswordMutation } from "state/resetApi";
+import {
+  useRequestPasswordResetMutation,
+  useVerifyOtpMutation,
+  useResetPasswordMutation,
+} from "state/resetApi";
 
 const ForgotPassword = () => {
   const theme = useTheme();
@@ -20,11 +25,14 @@ const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [requestPasswordReset, { isLoading, isError, error }] = useRequestPasswordResetMutation();
+  const [requestPasswordReset, { isLoading, isError, error }] =
+    useRequestPasswordResetMutation();
   const [verifyOtp] = useVerifyOtpMutation();
   const [resetPassword] = useResetPasswordMutation();
 
   const [stage, setStage] = useState(0); // 0: request reset, 1: verify OTP, 2: reset password
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Controls the Snackbar
+  const [snackbarMessage, setSnackbarMessage] = useState(""); // Message to be shown on the Snackbar
 
   const handlePasswordResetRequest = async (e) => {
     e.preventDefault();
@@ -33,6 +41,10 @@ const ForgotPassword = () => {
       if (result) {
         setStage(1);
         console.log("OTP:", result);
+        setSnackbarMessage(
+          "OTP successfully sent. If you don't see the email in your inbox, check the spam folder."
+        );
+        setOpenSnackbar(true);
       }
     } catch (err) {
       console.error(err);
@@ -46,12 +58,23 @@ const ForgotPassword = () => {
       const result = await verifyOtp({ email, otp }).unwrap();
       if (result) {
         setStage(2);
+        setSnackbarMessage('Email successfully verified. Please update your new account password.');
+        setOpenSnackbar(true);
       }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred: " + err.message);
+    } catch (error) {
+      console.error(error);
+  
+      if (error.status === 400 && error.data.message === "Invalid OTP.") {
+        setSnackbarMessage('Invalid OTP. Please try again.');
+      } else {
+        setSnackbarMessage('An error occurred. Please try again later.');
+      }
+      setOpenSnackbar(true);
     }
   };
+  
+  
+  
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
@@ -60,9 +83,15 @@ const ForgotPassword = () => {
         alert("Passwords do not match.");
         return;
       }
-      const result = await resetPassword({ email, password: newPassword }).unwrap();
+      const result = await resetPassword({
+        email,
+        password: newPassword,
+      }).unwrap();
       if (result) {
-        navigate("/login");
+        setSnackbarMessage("Password Successfully Updated.");
+        setOpenSnackbar(true);
+        // Wait 2 seconds, then navigate to login
+        setTimeout(() => navigate("/login"), 2000);
       }
     } catch (err) {
       console.error(err);
@@ -72,6 +101,13 @@ const ForgotPassword = () => {
 
   const handleBackClick = () => {
     navigate("/login");
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
@@ -84,6 +120,12 @@ const ForgotPassword = () => {
         justifyContent: "center",
       }}
     >
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
       <Box
         component="form"
         sx={{

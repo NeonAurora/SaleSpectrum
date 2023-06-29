@@ -38,8 +38,9 @@ const LoginPage = () => {
       const { data } = response;
 
       if (data && data.result && data.token) {
-        // Store the token in local storage
+        // Store the token and userId in local storage
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.result._id);
         dispatch(login(data.result));
         dispatch(setUserId(data.result._id));
         navigate("/dashboard");
@@ -51,7 +52,8 @@ const LoginPage = () => {
       console.error("Login failed:", error.message);
       // Handle login errors, e.g., show a notification
     }
-  };
+};
+
 
   return (
     <Container

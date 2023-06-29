@@ -38,6 +38,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   const handleLogout = () => {
     // Clear the user's token from local storage
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
 
     // Dispatch the logout action
     dispatch(logout());
