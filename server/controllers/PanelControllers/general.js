@@ -1,6 +1,7 @@
 import User from "../../models/User.js";
 import OverallStat from "../../models/OverallStat.js";
 import Transaction from "../../models/Transaction.js";
+import TempStat from "../../models/TempStat.js";
 
 export const getUser = async (req, res) => {
   try {
@@ -35,15 +36,25 @@ export const getDashboardStats = async (req, res) => {
       salesByCategory,
     } = overallStat[0];
 
-    const thisMonthStats = overallStat[0].monthlyData.find(({ month }) => {
+    const thisMonthStats1 = overallStat[0].monthlyData.find(({ month }) => {
       return month === currentMonth;
     });
 
-    const todayStats = overallStat[0].dailyData.find(({ date }) => {
+    const todayStats1 = overallStat[0].dailyData.find(({ date }) => {
       return date === currentDay;
     });
 
-    res.status(200).json({
+    // TempStat Stats
+    const tempStat = await TempStat.findOne().sort('createdAt');
+    if (!tempStat) {
+      return res.status(404).json({ message: "TempStat not found" });
+    }
+
+    // Extract necessary fields from the 'tempStat' object
+    const { thisMonthStats, todayStats, weekStats, thisMonthLeads } = tempStat;
+
+    // Return all data in the response
+    res.json({
       totalCustomers,
       yearlyTotalSoldUnits,
       yearlySalesTotal,
@@ -52,8 +63,11 @@ export const getDashboardStats = async (req, res) => {
       thisMonthStats,
       todayStats,
       transactions,
+      weekStats,
+      thisMonthLeads
     });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: `Error: ${error}` });
   }
 };
+

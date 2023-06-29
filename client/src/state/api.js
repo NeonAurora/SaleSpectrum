@@ -33,6 +33,7 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
+    "Stats"
   ],
   endpoints: (build) => ({
     getUser: build.query({
@@ -47,6 +48,10 @@ export const api = createApi({
       query: () => "client/customers",
       providesTags: ["Customers"],
     }),
+    getStats: build.query({
+      query: () => "sales/getStatss",
+      providesTags: ["Stats"],
+    }),    
     getCustomTrades: build.query({
       query: ({ page, pageSize, sort, search }) => ({
         url: "client/customTrades",
@@ -114,6 +119,7 @@ export const {
   useGetCustomTradeAudioQuery,
   useGetTransactionsQuery,
   useGetGeographyQuery,
+  useGetStatsQuery,
   useGetSalesQuery,
   useGetAdminsQuery,
   useGetUserPerformanceQuery,

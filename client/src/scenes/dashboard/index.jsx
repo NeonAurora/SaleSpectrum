@@ -19,6 +19,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import BreakdownChart from "components/BreakdownChart";
 import OverviewChart from "components/OverviewChart";
 import { useGetDashboardQuery } from "state/api";
+import { useGetStatsQuery } from "state/api";
 import StatBox from "components/StatBox";
 
 const Dashboard = () => {
@@ -26,6 +27,9 @@ const Dashboard = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   const { data, isLoading } = useGetDashboardQuery();
+  console.log("data", data);
+  const { statsData, isLoading1 } = useGetStatsQuery();
+  console.log('statsData:', statsData);
 
   const columns = [
     {
@@ -99,19 +103,20 @@ const Dashboard = () => {
         {/* ROW 1 */}
         <StatBox
           title="Revenue This Week"
-          value={data && data.totalCustomers}
-          increase="+14%"
-          description="Since last month"
+          value={data && data.weekStats.totalRevenue}
+          increase={data ? `+${data.weekStats.percentageChange}%` : ""}
+          description="Since last week"
           icon={
             <Email
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
         />
+
         <StatBox
           title="Leads Today"
-          value={data && data.todayStats.totalSales}
-          increase="+21%"
+          value={data && data.todayStats.totalLeads}
+          increase={data ? `+${data.todayStats.percentageChange}%` : ""}
           description="Since last month"
           icon={
             <PointOfSale
@@ -130,8 +135,8 @@ const Dashboard = () => {
         </Box>
         <StatBox
           title="Revenue This Month"
-          value={data && data.thisMonthStats.totalSales}
-          increase="+5%"
+          value={data && data.thisMonthStats.totalRevenue}
+          increase={data ? `+${data.thisMonthStats.percentageChange}%` : ""}
           description="Since last month"
           icon={
             <PersonAdd
@@ -141,8 +146,8 @@ const Dashboard = () => {
         />
         <StatBox
           title="Leads This Month"
-          value={data && data.yearlySalesTotal}
-          increase="+43%"
+          value={data && data.thisMonthLeads.totalLeads}
+          increase={data ? `+${data.thisMonthLeads.percentageChange}%` : ""}
           description="Since last month"
           icon={
             <Traffic
