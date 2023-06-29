@@ -108,6 +108,16 @@ export const api = createApi({
         body: credentials,
       }),
     }),
+    validateToken: build.mutation({
+      query: (token) => ({
+        url: "auth/validateToken",
+        method: "POST",
+        headers: {
+          'authorization': `Bearer ${token}`
+        },
+      }),
+    }),
+    
   }),
 });
 
@@ -126,4 +136,5 @@ export const {
   useGetDashboardQuery,
   useRegisterMutation,
   useLoginMutation,
+  useValidateTokenMutation
 } = api;

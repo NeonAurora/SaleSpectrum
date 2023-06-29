@@ -3,10 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import SparkPost from 'sparkpost';
+import SparkPost from "sparkpost";
 
 let otpMap = new Map();
-
 
 export const register = async (req, res) => {
   const {
@@ -87,8 +86,7 @@ export const login = async (req, res) => {
   }
 };
 
-
-export const forgotPass = async(req,res) => {
+export const forgotPass = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -99,49 +97,48 @@ export const forgotPass = async(req,res) => {
     }
 
     // Generate OTP
-    const otp = crypto.randomBytes(3).toString('hex');
+    const otp = crypto.randomBytes(3).toString("hex");
 
     // Store OTP in map
     otpMap.set(email, otp);
 
     // Initialize SparkPost
     const client = new SparkPost(process.env.SPARKPOST_API_KEY);
-    console.log('api_key', client);
+    console.log("api_key", client);
 
     // Send email
-    client.transmissions.send({
-      options: {
-        sandbox: false // Disable sandbox mode
-      },
-      content: {
-        from: 'info@pass.ivan.solar', // Use your verified email
-        subject: 'Your OTP',
-        text: `Your OTP is ${otp}`
-      },
-      recipients: [
-        {address: email}
-      ]
-    })
-    .then(data => {
-      console.log('Woohoo! You just sent your first mailing!');
-      console.log(data);
-      res.status(200).json({ message: "OTP sent to email." });
-    })
-    .catch(err => {
-      console.log('Whoops! Something went wrong');
-      console.log(err);
-      res.status(500).json({ message: "Something went wrong. Please try again." });
-    });
-
+    client.transmissions
+      .send({
+        options: {
+          sandbox: false, // Disable sandbox mode
+        },
+        content: {
+          from: "info@pass.ivan.solar", // Use your verified email
+          subject: "Your OTP",
+          text: `Your OTP is ${otp}`,
+        },
+        recipients: [{ address: email }],
+      })
+      .then((data) => {
+        console.log("Woohoo! You just sent your first mailing!");
+        console.log(data);
+        res.status(200).json({ message: "OTP sent to email." });
+      })
+      .catch((err) => {
+        console.log("Whoops! Something went wrong");
+        console.log(err);
+        res
+          .status(500)
+          .json({ message: "Something went wrong. Please try again." });
+      });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong. Please try again." });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again." });
   }
 };
 
-
-
-
-export const verifyOTP = async(req,res) => {
+export const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
 
   try {
@@ -152,14 +149,14 @@ export const verifyOTP = async(req,res) => {
     }
 
     res.status(200).json({ message: "OTP verified." });
-
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong. Please try again." });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again." });
   }
 };
 
-
-export const resetPass = async(req,res) => {
+export const resetPass = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -177,9 +174,33 @@ export const resetPass = async(req,res) => {
     otpMap.delete(email);
 
     res.status(200).json({ message: "Password reset successful." });
-
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong. Please try again." });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again." });
   }
 };
+
+export const validateToken = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    console.log("Token:", token);
+
+    if (!token) throw new Error("No token found");
+
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded data:", decodedData);
+
+    if (!decodedData?.id) throw new Error("Invalid token");
+
+    const user = await User.findById(decodedData.id);
+    if (!user) throw new Error("User not found");
+
+    res.status(200).json({ result: user, token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 

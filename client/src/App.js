@@ -1,8 +1,14 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { themeSettings } from "theme";
 import Layout from "scenes/layout";
 import Dashboard from "scenes/dashboard";
@@ -24,13 +30,16 @@ import Radial from "scenes/radial";
 import ForgotPassword from "scenes/forgotPassword";
 import ResetPass from "scenes/resetPass";
 import ResetRequest from "scenes/resetReq";
+import { RouteGuard } from "state/RouteGuard";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+
   return (
     <div className="app">
       <BrowserRouter>
+        <RouteGuard />
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
@@ -53,9 +62,9 @@ function App() {
               <Route path="/breakdown" element={<Breakdown />} />
               <Route path="/greater wealth" element={<GreaterWealth />} />
               <Route path="/performance" element={<Performance />} />
-              <Route path="/audit logs" element={<AuditLogs/>} />
-              <Route path="/radial" element={<Radial/>}/>
-              <Route path="/admin" element={<Admin/>} />
+              <Route path="/audit logs" element={<AuditLogs />} />
+              <Route path="/radial" element={<Radial />} />
+              <Route path="/admin" element={<Admin />} />
             </Route>
           </Routes>
         </ThemeProvider>

@@ -19,7 +19,7 @@ import connectDB from "./config/database.js";
 import authRoutes from "./routes/DisplayRoutes/auth.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 import bcrypt from "bcryptjs";
-import { getTempStat } from "./controllers/PanelControllers/sales.js";
+import { validateToken } from "./controllers/PanelControllers/auth.js";
 // data imports
 import User from "./models/User.js";
 import Product from "./models/Product.js";
