@@ -20,7 +20,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import BreakdownChart from "components/BreakdownChart";
 import OverviewChart from "components/OverviewChart";
 import { useGetDashboardQuery } from "state/api";
-import { useGetStatsQuery } from "state/api";
 import StatBox from "components/StatBox";
 
 const Dashboard = () => {
@@ -29,8 +28,6 @@ const Dashboard = () => {
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   const { data, isLoading } = useGetDashboardQuery();
   console.log("data", data);
-  const { statsData, isLoading1 } = useGetStatsQuery();
-  console.log("statsData:", statsData);
 
   const columns = [
     {

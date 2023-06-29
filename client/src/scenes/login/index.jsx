@@ -31,8 +31,8 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      console.log("Login data:", { email, password });
-      const response = await loginMutation({ email, password });
+      console.log("Login data:", { email, password, rememberMe });
+      const response = await loginMutation({ email, password, rememberMe });
       console.log("Login response:", response);
 
       const { data } = response;
@@ -52,8 +52,7 @@ const LoginPage = () => {
       console.error("Login failed:", error.message);
       // Handle login errors, e.g., show a notification
     }
-};
-
+  };
 
   return (
     <Container
@@ -180,9 +179,7 @@ const LoginPage = () => {
             <Button
               variant="text"
               color="secondary"
-              onClick={() => {
-                // Add logic for handling remember me here
-              }}
+              onClick={() => setRememberMe(!rememberMe)}
               sx={{ textTransform: "none" }}
             >
               Remember Me

@@ -49,7 +49,7 @@ export const api = createApi({
       providesTags: ["Customers"],
     }),
     getStats: build.query({
-      query: () => "sales/getStatss",
+      query: () => "sales/getStats",
       providesTags: ["Stats"],
     }),    
     getCustomTrades: build.query({
