@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from 'axios';
+
 import {
   Box,
   Button,
@@ -54,9 +56,54 @@ const LoginPage = () => {
     }
   };
 
-  const googleAuth = () => {
-    window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, "_self");
+  const handleGoogleLogin = async (token) => {
+    try {
+      // Verify the token with your server
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/google/verify`, { token });
+      console.log("Google login response:", response);
+  
+      const { data } = response;
+  
+      if (data && data.result && data.token) {
+        // Store the token and userId in local storage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.result._id);
+        dispatch(login(data.result));
+        dispatch(setUserId(data.result._id));
+        navigate("/dashboard");
+      } else {
+        console.error("Unexpected Google login response:", response);
+        // Handle login errors, e.g., show a notification
+      }
+    } catch (error) {
+      console.error("Google login failed:", error.message);
+      // Handle login errors, e.g., show a notification
+    }
   };
+
+  const googleAuth = () => {
+    // Open the Google sign-in page in a new popup window
+    const googleWindow = window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, 'googleWindow', 'width=500,height=500');
+  
+    // Set a timer to periodically check the popup window
+    const checkInterval = setInterval(() => {
+      try {
+        if (!googleWindow || googleWindow.closed) {
+          clearInterval(checkInterval);
+        } else if (googleWindow.location.search) {
+          const url = new URL(googleWindow.location);
+          const code = url.searchParams.get('code');
+          if (code) {
+            handleGoogleLogin(code);
+            googleWindow.close();
+          }
+        }
+      } catch (error) {
+        // Ignore errors (usually due to same-origin policy)
+      }
+    }, 500);
+  };
+  
 
   return (
     <Container

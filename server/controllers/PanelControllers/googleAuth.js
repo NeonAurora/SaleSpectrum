@@ -1,4 +1,7 @@
 import passport from "passport";
+import User from "../../models/User.js";
+import axios from "axios";
+import jwt from "jsonwebtoken";
 
 export const loginSuccess = (req, res) => {
   if (req.user) {
@@ -24,10 +27,54 @@ export const googleLogin = passport.authenticate("google", [
   "email",
 ]);
 
-export const googleCallback = passport.authenticate("google", {
-  successRedirect: `${process.env.CLIENT_URL}/dashBoard`,
-  failureRedirect: `${process.env.CLIENT_URL}/dashBoard`,
-});
+export const googleCallback = async (req, res) => {
+  const { code } = req.query;
+
+  // Use your Google client id and secret to exchange code for access_token
+  const { data } = await axios.post('https://oauth2.googleapis.com/token', {
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    code,
+    grant_type: 'authorization_code',
+    redirect_uri: `${process.env.SERVER_URL}/auth/google/callback`
+  });
+
+  const access_token = data.access_token;
+
+  // Fetch user's information using access_token
+  const { data: userData } = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+    headers: {
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+
+  const { email } = userData;
+
+  // Try to find the user in your database
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    console.log("User not found:", email);
+    return res.status(404).json({ message: "User not found." });
+  }
+
+  const token = jwt.sign(
+    { email: user.email, id: user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "30d" }
+  );
+
+  console.log("Login successful:", { result: user, token });
+
+  // Here, we send a message to the origin of the popup (i.e., your app)
+  res.send(`
+    <script>
+      window.opener.postMessage('${token}', '${process.env.CLIENT_URL}');
+      window.close();
+    </script>
+  `);
+};
+
 
 
 export const logout = (req, res) => {
