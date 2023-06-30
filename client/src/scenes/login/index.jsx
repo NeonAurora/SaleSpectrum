@@ -192,27 +192,27 @@ const LoginPage = () => {
         </Box>
         <Typography
           variant="body1"
-          sx={{ textAlign: "center", marginBottom: "1rem" }}
+          sx={{ textAlign: "center", marginBottom: "1rem", fontFamily: "sans-serif" }}
         >
-          Or sign up using
+          Or Continue With
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <IconButton color="secondary">
-            <div onClick={googleAuth}>
-              <Google />
-            </div>
-          </IconButton>
-
-          <IconButton color="secondary">
-            <Facebook />
-          </IconButton>
-          <IconButton color="secondary">
-            <img
-              src={Microsoft}
-              alt="Custom Icon A"
-              style={{ width: "24px", height: "24px" }}
-            />
-          </IconButton>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={googleAuth}
+            startIcon={<Google />}
+            sx={{
+              padding: "0.3rem",
+              width: "100%",
+              textTransform: "none",
+              fontSize: "1.2rem",
+              borderRadius: "0.5rem",
+              fontFamily: "Roboto" // to make the corner smoother
+            }}
+          >
+            Google
+          </Button>
         </Box>
       </Box>
     </Container>

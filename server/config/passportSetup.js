@@ -9,9 +9,9 @@ passport.use(
       callbackURL: "/auth/google/callback",
       scope: ["profile", "email"],
     },
-    function (accessToken, refreshToken, profile, callback) {
-      // For now, we are just returning the profile information without any database checks
-      callback(null, profile);
+    async function (accessToken, refreshToken, profile, done) {
+      const { email } = profile._json;
+      done(null, email);
     }
   )
 );

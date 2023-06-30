@@ -117,7 +117,13 @@ export const api = createApi({
         },
       }),
     }),
-    
+    googleLogin: build.mutation({
+      query: (email) => ({
+        url: "auth/google/login",
+        method: "POST",
+        body: { email },
+      }),
+    }),    
   }),
 });
 
@@ -136,5 +142,6 @@ export const {
   useGetDashboardQuery,
   useRegisterMutation,
   useLoginMutation,
-  useValidateTokenMutation
+  useValidateTokenMutation,
+  useGoogleLoginMutation
 } = api;

@@ -31,6 +31,8 @@ import ForgotPassword from "scenes/forgotPassword";
 import ResetPass from "scenes/resetPass";
 import ResetRequest from "scenes/resetReq";
 import { RouteGuard } from "state/RouteGuard";
+import Test from "scenes/test";
+import GoogleAuthSuccess from "scenes/googleAuthSuccess";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -49,6 +51,8 @@ function App() {
             <Route path="/resetRequest" element={<ResetRequest />} />
             <Route path="/resetPass" element={<ResetPass />} />
             <Route path="/request-access" element={<RequestAccess />} />
+            <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
+            <Route path="/test" element={<Test />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
