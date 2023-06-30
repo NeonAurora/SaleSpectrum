@@ -117,6 +117,13 @@ export const api = createApi({
         },
       }),
     }),
+    loginWithGoogle: build.mutation({
+      query: (code) => ({
+        url: "auth/google/verify",
+        method: "POST",
+        body: { code },
+      }),
+    }),
     
   }),
 });
@@ -136,5 +143,6 @@ export const {
   useGetDashboardQuery,
   useRegisterMutation,
   useLoginMutation,
-  useValidateTokenMutation
+  useValidateTokenMutation,
+  useLoginWithGoogleMutation
 } = api;

@@ -31,6 +31,7 @@ import ForgotPassword from "scenes/forgotPassword";
 import ResetPass from "scenes/resetPass";
 import ResetRequest from "scenes/resetReq";
 import { RouteGuard } from "state/RouteGuard";
+import Dummy from "scenes/dummy";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -49,6 +50,7 @@ function App() {
             <Route path="/resetRequest" element={<ResetRequest />} />
             <Route path="/resetPass" element={<ResetPass />} />
             <Route path="/request-access" element={<RequestAccess />} />
+            <Route path="/dummy" element={<Dummy />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />

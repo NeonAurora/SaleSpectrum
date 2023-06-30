@@ -14,7 +14,7 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "state/authSlice";
 import { setUserId } from "state";
-import { useLoginMutation } from "state/api";
+import { useLoginMutation, useLoginWithGoogleMutation } from "state/api";
 import { Google, Facebook, microsoft } from "@mui/icons-material";
 import { Check } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const dispatch = useDispatch();
   const [loginMutation] = useLoginMutation();
+  const [loginWithGoogle] = useLoginWithGoogleMutation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -81,9 +82,36 @@ const LoginPage = () => {
     }
   };
 
+  // const googleAuth = () => {
+  //   // Open the Google sign-in page in a new popup window
+  //   const googleWindow = window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, 'googleWindow', 'width=500,height=500');
+  
+  //   // Set a timer to periodically check the popup window
+  //   const checkInterval = setInterval(() => {
+  //     try {
+  //       if (!googleWindow || googleWindow.closed) {
+  //         clearInterval(checkInterval);
+  //       } else if (googleWindow.location.search) {
+  //         const url = new URL(googleWindow.location);
+  //         const code = url.searchParams.get('code');
+  //         if (code) {
+  //           handleGoogleLogin(code);
+  //           googleWindow.close();
+  //         }
+  //       }
+  //     } catch (error) {
+  //       // Ignore errors (usually due to same-origin policy)
+  //     }
+  //   }, 500);
+  // };
+
   const googleAuth = () => {
     // Open the Google sign-in page in a new popup window
-    const googleWindow = window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, 'googleWindow', 'width=500,height=500');
+    const googleWindow = window.open(
+      `${process.env.REACT_APP_BASE_URL}/auth/google`,
+      "googleWindow",
+      "width=500,height=500"
+    );
   
     // Set a timer to periodically check the popup window
     const checkInterval = setInterval(() => {
@@ -92,9 +120,16 @@ const LoginPage = () => {
           clearInterval(checkInterval);
         } else if (googleWindow.location.search) {
           const url = new URL(googleWindow.location);
-          const code = url.searchParams.get('code');
-          if (code) {
-            handleGoogleLogin(code);
+          const token = url.searchParams.get("token");  // Retrieve the token
+          if (token) {
+            // Handle successful login
+            localStorage.setItem("token", token);
+            // We can't retrieve userId or user info directly here, so I'll remove these lines:
+            // localStorage.setItem("userId", data.result._id);
+            // dispatch(login(data.result));
+            // dispatch(setUserId(data.result._id));
+            // Instead, you should consider fetching user info on the /dashboard page using the token
+            navigate("/dashboard");
             googleWindow.close();
           }
         }
@@ -103,6 +138,8 @@ const LoginPage = () => {
       }
     }, 500);
   };
+  
+  
   
 
   return (
