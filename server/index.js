@@ -4,6 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
+import session from "express-session";
+import passport from "passport";
 import clientRoutes from "./routes/DisplayRoutes/client.js";
 import generalRoutes from "./routes/DisplayRoutes/general.js";
 import managementRoutes from "./routes/DisplayRoutes/management.js";
@@ -16,6 +18,7 @@ import productStatsRoutes from "./routes/OperateRoutes/productStatsRoutes.js";
 import customTradeRoutes from "./routes/OperateRoutes/customTradeRoutes.js";
 import tempStatRoutes from "./routes/OperateRoutes/tempStatRoutes.js";
 import connectDB from "./config/database.js";
+import passportSetup from "./config/passportSetup.js";
 import authRoutes from "./routes/DisplayRoutes/auth.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 import bcrypt from "bcryptjs";
@@ -68,6 +71,19 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+
+/* SESSION-COOKIE */
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 /* ROUTES */
 app.use("/auth", authRoutes);

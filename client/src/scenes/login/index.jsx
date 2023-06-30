@@ -54,6 +54,10 @@ const LoginPage = () => {
     }
   };
 
+  const googleAuth = () => {
+    window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, "_self");
+  };
+
   return (
     <Container
       maxWidth="xs"
@@ -194,8 +198,11 @@ const LoginPage = () => {
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <IconButton color="secondary">
-            <Google />
+            <div onClick={googleAuth}>
+              <Google />
+            </div>
           </IconButton>
+
           <IconButton color="secondary">
             <Facebook />
           </IconButton>
